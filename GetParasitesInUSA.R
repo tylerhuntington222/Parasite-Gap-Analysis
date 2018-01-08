@@ -40,6 +40,8 @@ contig.us <- us.states[!(us.states$NAME %in%
                            c("Alaska", "Hawaii", "Puerto Rico")),]
 captures.df <- read.csv("data/Carlson_et_al_2017/table_s12.csv")
 
+rawdata <- read.csv("data/Carlson_et_al_2017/rawdata.csv")
+
 # create spatial points data from captures.df
 coords.df <- captures.df[, c("Longitude", "Latitude")]
 coords.df$Latitude <- as.numeric(coords.df$Latitude)
@@ -61,14 +63,21 @@ us.para.df$Counter <- 1
 collapse.df <- ddply(us.para.df, .(ScientificName), summarize, 
                      Count = sum(Counter))
 
-# subset for species with at least three observations in contiguous US
-collapse.df.subset <- collapse.df[collapse.df$Count >= 3,]
+# subset for species with at least a min number of US captures/observations
+collapse.df.subset <- collapse.df[collapse.df$Count >= 5,]
 
 # get name list for US parasites
 us.para.names <- collapse.df.subset$ScientificName
 
+us.para.names <- as.character(us.para.names)
+
 # export df with species
 saveRDS(us.para.names, "output/contig_US_parasites.RDS")
+
+
+
+sp.names <- readRDS("output/contig_US_parasites_min5.RDS")
+
 
 
 

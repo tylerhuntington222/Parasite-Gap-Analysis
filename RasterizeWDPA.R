@@ -3,7 +3,7 @@
 # create a raster layer of the WDPA polygon layer
 
 
-setwd("~/Dropbox/parks_for_parasites/rem")
+setwd("~/Dropbox/parks_for_parasites/")
 
 # LIBRARIES
 require(raster)
@@ -23,7 +23,7 @@ package.list <- c("raster", "rgdal", "raster", "maptools", "sp",
 
 
 # load WDPA data 
-filename = "WDPA_USA_subset"
+filename = "WDPA_contig_US"
 wdpa.dsn = paste0("data/WDPA_Sep2017/", filename,".shp")
 wdpa.layer = filename
 wdpa.data <- readOGR(dsn = wdpa.dsn, layer = wdpa.layer, 
@@ -74,6 +74,7 @@ us.ras.template <- raster(resampledRaster)
 contig.us.wdpa$PA <- 1
 
 # rasterize WDPA layer for contiguous US
+# and export to /data directory
 wdpa.ras <- rasterize(contig.us.wdpa, us.ras.template, field = "PA",
                       filename = "data/WDPA_Sep2017/WDPA_raster_contig_US.tif",
                       overwrite = T)
@@ -92,7 +93,6 @@ over <- overlay(wdpa.ras, resampledRaster,
 
 
 
-# export state WDPA layer
 
 
 
